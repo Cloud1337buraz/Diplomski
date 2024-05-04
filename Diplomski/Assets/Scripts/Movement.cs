@@ -63,7 +63,7 @@ public class Movement : MonoBehaviour
         {
             isCrouching = false;
         }
-        while(isUnderSomething)
+        if(isUnderSomething)
         {
             isCrouching = true;
         }
