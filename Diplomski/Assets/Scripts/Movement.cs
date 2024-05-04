@@ -13,7 +13,6 @@ public class Movement : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
     public float ceilingDistance = 0.4f;
-    public LayerMask ceilingMask;
 
     public float walkSpeed = 12f;
     public float crouchSpeed;
@@ -24,20 +23,26 @@ public class Movement : MonoBehaviour
 
     Vector3 velocity;
     Vector3 normalHeight;
-    bool isUnderSomething;
-    bool isGrounded;
-    bool isCrouching;
+    public bool isUnderSomething;
+    public bool isGrounded;
+    public bool isCrouching;
+    public bool isSPressed;
     void Start()
     {
         currentSpeed = walkSpeed;
         crouchSpeed = walkSpeed / 2;
         normalHeight = transform.localScale;
     }
-
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Vector3 direction = Vector3.up * ceilingDistance;
+        Gizmos.DrawRay(ceilingCheck.position, direction);
+    }
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        isUnderSomething = Physics.CheckSphere(ceilingCheck.position, ceilingDistance, ceilingMask);
+        
 
         if (isGrounded && velocity.y < 0)
         {
@@ -55,11 +60,30 @@ public class Movement : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             isCrouching = false;
         }
-        if(Input.GetKeyDown("s") && isGrounded)
+        if (Input.GetKey(KeyCode.S) && isGrounded)
+        {
+            isSPressed = true;
+        }
+        else
+        {
+            isSPressed = false;
+        }
+        if(isSPressed)
         {
             isCrouching = true;
         }
-        if (Input.GetKeyUp("s") && isGrounded)
+
+        isUnderSomething = false;
+
+        if(isSPressed)
+        {
+            isCrouching = true;
+        }
+        else if(isCrouching)
+        {
+            isUnderSomething = Physics.Raycast(ceilingCheck.position, Vector3.up, out RaycastHit hit, ceilingDistance, groundMask);
+        }
+        if(!isSPressed)
         {
             isCrouching = false;
         }
