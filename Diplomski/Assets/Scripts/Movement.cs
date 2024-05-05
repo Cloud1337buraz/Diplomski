@@ -6,6 +6,9 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public CharacterController controller;
+    public Animator CharacterAnimator;
+
+    bool jumpAnimation;
 
     public Transform groundCheck;
     public Transform ceilingCheck;
@@ -32,6 +35,10 @@ public class Movement : MonoBehaviour
         currentSpeed = walkSpeed;
         crouchSpeed = walkSpeed / 2;
         normalHeight = transform.localScale;
+
+        CharacterAnimator = PlayerModel.GetComponent<Animator>();
+        CharacterAnimator.SetBool("Jump", false);
+        CharacterAnimator.SetBool("JumpLand", false);
     }
     void OnDrawGizmosSelected()
     {
@@ -59,6 +66,16 @@ public class Movement : MonoBehaviour
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             isCrouching = false;
+        }
+        if(isGrounded && CharacterAnimator.GetBool("Jump") == true)
+        {
+            CharacterAnimator.SetBool("Jump", false);
+            CharacterAnimator.SetBool("JumpLand", true);
+        }
+        if(!isGrounded)
+        {
+            CharacterAnimator.SetBool("Jump", true);
+            CharacterAnimator.SetBool("JumpLand", false);
         }
         if (Input.GetKey(KeyCode.S) && isGrounded)
         {
