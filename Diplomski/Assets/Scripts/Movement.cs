@@ -20,7 +20,12 @@ public class Movement : MonoBehaviour
     public float currentSpeed;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
-    public float crouchHeight;
+
+    public float hitboxHeight;
+    public float hitboxY;
+    public float heightPrecentage = 100f;
+    public float startingHeight;
+    public float startingY;
 
     Vector3 velocity;
     
@@ -41,12 +46,15 @@ public class Movement : MonoBehaviour
         CharacterAnimator.SetBool("CrouchForward", false);
         CharacterAnimator.SetBool("CrouchBackward", false);
         CharacterAnimator.SetBool("CrouchIdle", false);
+
+        startingHeight = controller.height;
+        startingY = controller.center.y;
     }
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.green;
-        Vector3 direction = Vector3.down * groundDistance;
-        Gizmos.DrawRay(groundCheck.position, direction);
+        Gizmos.color = Color.red;
+        Vector3 direction = Vector3.up * ceilingDistance;
+        Gizmos.DrawRay(ceilingCheck.position, direction);
     }
     bool isPlaying(string stateName)
     {
@@ -68,9 +76,14 @@ public class Movement : MonoBehaviour
 
         float x = Input.GetAxis("Horizontal");
         Vector3 move = transform.right * x;
-        if(!(isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Crouch To Stand")))
+        if(!(isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Crouch To Stand") || isPlaying("Idle Crouching")))
         {
             controller.Move(move * currentSpeed * Time.deltaTime);
+            if (Input.GetKeyDown("w") && isGrounded && !isCrouching)
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                isCrouching = false;
+            }
         }
         if(Input.GetKey(KeyCode.D) && isGrounded && !isCrouching)
         {
@@ -103,11 +116,6 @@ public class Movement : MonoBehaviour
         else
         {
             CharacterAnimator.SetBool("CrouchBackward", false);
-        }
-        if (Input.GetKeyDown("w") && isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            isCrouching = false;
         }
         if(isGrounded && CharacterAnimator.GetBool("Jump") == true)
         {
@@ -157,16 +165,24 @@ public class Movement : MonoBehaviour
         }
         if (isCrouching && isGrounded)
         {
+            hitboxHeight = startingHeight * heightPrecentage / 100;
+            hitboxY = startingY - ((startingHeight - hitboxHeight) / 2);
+            controller.height = hitboxHeight;
+            controller.center = new Vector3(0, hitboxY, 0);
             CharacterAnimator.SetBool("CrouchIdle", true);
             currentSpeed = crouchSpeed;
         }
         if(!isCrouching && isGrounded)
         {
+            hitboxHeight = startingHeight;
+            hitboxY = startingY;
+            controller.height = hitboxHeight;
+            controller.center = new Vector3(0, hitboxY, 0);
             CharacterAnimator.SetBool("CrouchIdle", false);
             currentSpeed = walkSpeed;
         }
-        velocity.y += gravity * Time.deltaTime;
 
+        velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
 
