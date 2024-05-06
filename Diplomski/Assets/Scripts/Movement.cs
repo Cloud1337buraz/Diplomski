@@ -33,6 +33,8 @@ public class Movement : MonoBehaviour
     public bool isGrounded;
     public bool isCrouching;
     public bool isSPressed;
+
+
     void Start()
     {
         currentSpeed = walkSpeed;
