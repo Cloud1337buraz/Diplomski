@@ -37,7 +37,11 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        Jump();
+        if (!(isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Crouch To Stand") || isPlaying("Idle Crouching")))
+        {
+            Jump();
+            Debug.Log("uso");
+        }
     }
     public void OnCrouch(InputAction.CallbackContext context)
     {
@@ -66,8 +70,6 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (!(isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Crouch To Stand") || isPlaying("Idle Crouching")))
-        {
             Vector3 currentVelocity = rb.velocity;
             Vector3 targetVelocity = new Vector3(move.x, 0, 0);
             targetVelocity *= speed;
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
         
             Vector3.ClampMagnitude(velocityChange, maxForce);
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
-        }
+
         if (move.x > 0 && grounded && !isCrouching)
             {
                 CharacterAnimator.SetBool("RunForward", true);
@@ -96,7 +98,6 @@ public class PlayerController : MonoBehaviour
             {
                 CharacterAnimator.SetBool("RunBackward", false);
             }
-        
     }
 
     private void Crouch()
@@ -165,6 +166,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         currentSpeed = speed;
         crouchSpeed = speed / 2;
