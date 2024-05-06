@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,12 +21,15 @@ public class PlayerController : MonoBehaviour
     public float hitboxHeight;
     public float hitboxY;
     public float heightPrecentage = 100f;
-    public float startingHeight;
     public float startingY;
 
     public bool isUnderSomething;
     public bool isCrouching;
     public bool isSPressed;
+    public CeilingCheck ceilingCheckScript;
+
+    private Vector3 boxColliderSize;
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -37,11 +37,10 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (!(isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Crouch To Stand") || isPlaying("Idle Crouching")))
+        if(!(isSPressed || isPlaying("Crouch To Stand") || isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching")))
         {
             Jump();
-            Debug.Log("uso");
-        }
+        }  
     }
     public void OnCrouch(InputAction.CallbackContext context)
     {
@@ -50,22 +49,23 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        if (!(isPlaying("Crouch To Stand") || isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching")))
+        {
+            Move();
+        }
         Crouch();
     }
 
     void Jump()
     {
-        Vector3 jumpForces = Vector3.zero;
-        if (!(isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Crouch To Stand") || isPlaying("Idle Crouching")))
-        {
+            Vector3 jumpForces = Vector3.zero;
+
             if (grounded && !isCrouching)
             {
                 jumpForces = Vector3.up * jumpForce;
                 isCrouching = false;
             }
             rb.AddForce(jumpForces, ForceMode.VelocityChange);
-        }
     }
 
     private void Move()
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
             Vector3.ClampMagnitude(velocityChange, maxForce);
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
-        if (move.x > 0 && grounded && !isCrouching)
+            if (move.x > 0 && grounded && !isCrouching)
             {
                 CharacterAnimator.SetBool("RunForward", true);
             }
@@ -110,14 +110,26 @@ public class PlayerController : MonoBehaviour
         {
             isSPressed = false;
         }
+
+        isUnderSomething = false;
+
         if (isSPressed)
         {
             isCrouching = true;
+        }
+        else if (isCrouching)
+        {
+            isUnderSomething = ceilingCheckScript.isUnderSomething;
         }
         if (!isSPressed)
         {
             isCrouching = false;
         }
+        if (isUnderSomething)
+        {
+            isCrouching = true;
+        }
+
         if (move.x > 0 && grounded && isCrouching)
         {
             CharacterAnimator.SetBool("CrouchForward", true);
@@ -136,19 +148,19 @@ public class PlayerController : MonoBehaviour
         }
         if (isCrouching && grounded)
         {
-            //hitboxHeight = startingHeight * heightPrecentage / 100;
-            //hitboxY = startingY - ((startingHeight - hitboxHeight) / 2);
-            //boxCollider.size = new Vector3(0, hitboxHeight, 0);
-            //boxCollider.center = new Vector3(0, hitboxY, 0);
+            hitboxHeight = boxColliderSize.y * heightPrecentage / 100;
+            hitboxY = startingY - ((boxColliderSize.y - hitboxHeight) / 2);
+            boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
+            boxCollider.center = new Vector3(0, hitboxY, 0);
             CharacterAnimator.SetBool("CrouchIdle", true);
             currentSpeed = crouchSpeed;
         }
         if (!isCrouching && grounded)
         {
-            //hitboxHeight = startingHeight;
-            //hitboxY = startingY;
-            //boxCollider.size = new Vector3(0, hitboxHeight, 0);
-            //boxCollider.center = new Vector3(0, hitboxY, 0);
+            hitboxHeight = boxColliderSize.y;
+            hitboxY = startingY;
+            boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
+            boxCollider.center = new Vector3(0, hitboxY, 0);
             CharacterAnimator.SetBool("CrouchIdle", false);
             currentSpeed = speed;
         }
@@ -168,8 +180,12 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
+        boxColliderSize = boxCollider.size;
+
         currentSpeed = speed;
         crouchSpeed = speed / 2;
+
+        startingY = boxCollider.center.y;
 
         CharacterAnimator = PlayerModel.GetComponent<Animator>();
         CharacterAnimator.SetBool("Jump", false);

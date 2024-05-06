@@ -350,7 +350,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Stand To Crouch
-  m_Speed: 1.8
+  m_Speed: 4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3937630528509199578}
@@ -412,9 +412,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.60903627
+  m_TransitionDuration: 0.11265057
   m_TransitionOffset: 0
-  m_ExitTime: 0.40249
+  m_ExitTime: 0.9981526
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -559,9 +559,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.77272725
+  m_TransitionDuration: 0.11453819
+  m_TransitionOffset: 0.00020302393
+  m_ExitTime: 0.9943919
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -809,10 +809,10 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.8333334
-  m_HasExitTime: 0
+  m_TransitionDuration: 0.11506021
+  m_TransitionOffset: 0.002409639
+  m_ExitTime: 0.9952611
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
