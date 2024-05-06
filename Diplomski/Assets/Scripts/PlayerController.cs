@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     public BoxCollider boxCollider;
     public Rigidbody rb;
+    public AnimationEvent animationEventScript;
+
     private GroundCheck groundCheck;
     public float speed, maxForce, jumpForce;
     private Vector2 move;
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour
     {
             Vector3 currentVelocity = rb.velocity;
             Vector3 targetVelocity = new Vector3(move.x, 0, 0);
-            targetVelocity *= speed;
+            targetVelocity *= currentSpeed;
 
             targetVelocity = transform.TransformDirection(targetVelocity);
 
@@ -148,19 +150,25 @@ public class PlayerController : MonoBehaviour
         }
         if (isCrouching && grounded)
         {
-            hitboxHeight = boxColliderSize.y * heightPrecentage / 100;
-            hitboxY = startingY - ((boxColliderSize.y - hitboxHeight) / 2);
-            boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
-            boxCollider.center = new Vector3(0, hitboxY, 0);
+            if(animationEventScript.isCrouched)
+            {
+                hitboxHeight = boxColliderSize.y * heightPrecentage / 100;
+                hitboxY = startingY - ((boxColliderSize.y - hitboxHeight) / 2);
+                boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
+                boxCollider.center = new Vector3(0, hitboxY, 0);
+            }
             CharacterAnimator.SetBool("CrouchIdle", true);
             currentSpeed = crouchSpeed;
         }
         if (!isCrouching && grounded)
         {
-            hitboxHeight = boxColliderSize.y;
-            hitboxY = startingY;
-            boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
-            boxCollider.center = new Vector3(0, hitboxY, 0);
+            if (!animationEventScript.isCrouched)
+            {
+                hitboxHeight = boxColliderSize.y;
+                hitboxY = startingY;
+                boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
+                boxCollider.center = new Vector3(0, hitboxY, 0);
+            }
             CharacterAnimator.SetBool("CrouchIdle", false);
             currentSpeed = speed;
         }
@@ -200,7 +208,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void SetGrounded(bool state)
