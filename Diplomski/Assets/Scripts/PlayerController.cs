@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!(isPlaying("Crouch To Stand") || isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching")))
+        if (!(isPlaying("Crouch To Stand") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching")))
         {
             Move();
         }
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
     private void Crouch()
     {
-        if (Input.GetKey(KeyCode.S) && grounded)
+        if (Input.GetKey(KeyCode.LeftControl) && grounded)
         {
             isSPressed = true;
         }
