@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,7 +32,11 @@ public class PlayerController : MonoBehaviour
     public CeilingCheck ceilingCheckScript;
 
     private Vector3 boxColliderSize;
+    public Vector3 lookPos;
 
+    private GameObject helper;
+    public Transform shoulderObj;
+    public Transform shoulderTrans;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -186,6 +191,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        helper = new GameObject();
+        helper.name = "Kurac helper moj";
+
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         boxColliderSize = boxCollider.size;
@@ -208,6 +216,24 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            Vector3 lookP = hit.point;
+            lookP.z = transform.position.z;
+            lookPos = lookP;
+        }
+
+        //Arm ik rot
+        //lookPos = new Vector3(3.40100002f, 1.74199998f, 10.5880003f);
+        shoulderObj.LookAt(lookPos);
+
+        Vector3 shoulderPos = shoulderTrans.TransformPoint(Vector3.zero);
+        helper.transform.position = shoulderPos;
+        helper.transform.parent = transform;
+
+        shoulderObj.position = helper.transform.position;
     }
 
     public void SetGrounded(bool state)
