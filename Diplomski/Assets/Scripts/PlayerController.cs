@@ -69,10 +69,12 @@ public class PlayerController : MonoBehaviour
 
             if (grounded && !isCrouching)
             {
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
                 jumpForces = Vector3.up * jumpForce;
                 isCrouching = false;
+                rb.AddForce(jumpForces, ForceMode.VelocityChange);
+                grounded = false;
             }
-            rb.AddForce(jumpForces, ForceMode.VelocityChange);
     }
 
     private void Move()
@@ -192,7 +194,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         helper = new GameObject();
-        helper.name = "Kurac helper moj";
 
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
