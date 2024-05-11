@@ -291,6 +291,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &241025493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 241025494}
+  m_Layer: 6
+  m_Name: CameraPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &241025494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241025493}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.13052616, y: -0, z: -0, w: 0.9914449}
+  m_LocalPosition: {x: -0.17234135, y: 2.058, z: -6.502}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1353386585}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &369155266
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,8 +669,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.42, y: 0.653502, z: 0.13359356}
-  m_Center: {x: -0.014602348, y: -0.32824898, z: 0.0016226768}
+  m_Size: {x: 0.36415195, y: 0.653502, z: 0.13359356}
+  m_Center: {x: -0.020186901, y: -0.32824898, z: 0.0016226768}
 --- !u!114 &546106875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,6 +894,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -937,13 +969,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
-  m_LocalPosition: {x: -0.17234135, y: 0.79, z: -2.11}
+  m_LocalRotation: {x: -0, y: 0.9914449, z: -0.13052616, w: 0}
+  m_LocalPosition: {x: 5.5723414, y: 3.02, z: 17.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1353386585}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d113b77bff93f4595766ff2f8c4cad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraPosition: {fileID: 241025494}
 --- !u!1 &1091189447
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,11 +1159,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 963194228}
   - {fileID: 424439961}
   - {fileID: 546106873}
   - {fileID: 1490980067}
   - {fileID: 369155267}
+  - {fileID: 241025494}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!54 &1353386587
@@ -1277,6 +1322,7 @@ MonoBehaviour:
   maxForce: 1
   jumpForce: 8
   grounded: 0
+  direction: 0
   CharacterAnimator: {fileID: 5224551939765065227}
   PlayerModel: {fileID: 2189165697689160817}
   crouchSpeed: 0
@@ -1285,6 +1331,7 @@ MonoBehaviour:
   hitboxY: 0
   heightPrecentage: 76
   startingY: 0
+  lerpRate: 3
   isUnderSomething: 0
   isCrouching: 0
   isSPressed: 0
@@ -1292,6 +1339,7 @@ MonoBehaviour:
   lookPos: {x: 0, y: 0, z: 0}
   shoulderObj: {fileID: 369155267}
   shoulderTrans: {fileID: 5100624509914321555}
+  cameraPosition: {fileID: 241025493}
 --- !u!65 &1353386590
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1311,8 +1359,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.39323115, y: 1.8516126, z: 0.863657}
-  m_Center: {x: 0, y: 0.19374621, z: 0}
+  m_Size: {x: 0.29042864, y: 1.8516126, z: 0.863657}
+  m_Center: {x: -0.015330076, y: 0.19374621, z: 0}
 --- !u!1 &1385049216
 GameObject:
   m_ObjectHideFlags: 0
@@ -6964,6 +7012,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 2100559501}
   - {fileID: 705507995}
+  - {fileID: 963194228}
   - {fileID: 1353386585}
   - {fileID: 1385049217}
   - {fileID: 494324305}

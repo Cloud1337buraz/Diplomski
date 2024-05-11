@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,8 +12,10 @@ public class PlayerController : MonoBehaviour
     private GroundCheck groundCheck;
     public float speed, maxForce, jumpForce;
     private Vector2 move;
+    private Vector2 fakeMove;
     private Vector2 crouch;
     public bool grounded;
+    public int direction;
 
     public Animator CharacterAnimator;
 
@@ -25,6 +28,9 @@ public class PlayerController : MonoBehaviour
     public float hitboxY;
     public float heightPrecentage = 100f;
     public float startingY;
+    private float lerp1;
+    private float lerp2;
+    public float lerpRate;
 
     public bool isUnderSomething;
     public bool isCrouching;
@@ -37,6 +43,7 @@ public class PlayerController : MonoBehaviour
     private GameObject helper;
     public Transform shoulderObj;
     public Transform shoulderTrans;
+    public GameObject cameraPosition;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -80,8 +87,12 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
             Vector3 currentVelocity = rb.velocity;
-            Vector3 targetVelocity = new Vector3(move.x, 0, 0);
+            fakeMove = move;
+            fakeMove.x *= direction;
+            Vector3 targetVelocity = new Vector3(fakeMove.x, 0, 0);
             targetVelocity *= currentSpeed;
+
+            Debug.Log(fakeMove + "  " + direction);
 
             targetVelocity = transform.TransformDirection(targetVelocity);
 
@@ -91,7 +102,7 @@ public class PlayerController : MonoBehaviour
             Vector3.ClampMagnitude(velocityChange, maxForce);
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
-            if (move.x > 0 && grounded && !isCrouching)
+            if (fakeMove.x > 0 && grounded && !isCrouching)
             {
                 CharacterAnimator.SetBool("RunForward", true);
             }
@@ -99,7 +110,7 @@ public class PlayerController : MonoBehaviour
             {
                 CharacterAnimator.SetBool("RunForward", false);
             }
-            if (move.x < 0 && grounded && !isCrouching)
+            if (fakeMove.x < 0 && grounded && !isCrouching)
             {
                 CharacterAnimator.SetBool("RunBackward", true);
             }
@@ -139,7 +150,7 @@ public class PlayerController : MonoBehaviour
             isCrouching = true;
         }
 
-        if (move.x > 0 && grounded && isCrouching)
+        if (fakeMove.x > 0 && grounded && isCrouching)
         {
             CharacterAnimator.SetBool("CrouchForward", true);
         }
@@ -147,7 +158,7 @@ public class PlayerController : MonoBehaviour
         {
             CharacterAnimator.SetBool("CrouchForward", false);
         }
-        if (move.x < 0 && grounded && isCrouching)
+        if (fakeMove.x < 0 && grounded && isCrouching)
         {
             CharacterAnimator.SetBool("CrouchBackward", true);
         }
@@ -190,6 +201,30 @@ public class PlayerController : MonoBehaviour
             return false;
     }
 
+    void PlayerRotationHandler()
+    {
+        if(lookPos.x > transform.position.x)
+        {
+            cameraPosition.transform.parent = null;
+            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, 0)), lerp1);
+            lerp1 += Time.deltaTime * lerpRate;
+            lerp2 = 0f;
+            direction = -1;
+            cameraPosition.transform.parent = transform;
+        }
+        else
+        {
+            cameraPosition.transform.parent = null;
+            //transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+            transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, 0)), Quaternion.Euler(new Vector3(0, 180, 0)), lerp2);
+            lerp2 += Time.deltaTime * lerpRate;
+            lerp1 = 0f;
+            direction = 1;
+            cameraPosition.transform.parent = transform;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -212,6 +247,10 @@ public class PlayerController : MonoBehaviour
         CharacterAnimator.SetBool("CrouchForward", false);
         CharacterAnimator.SetBool("CrouchBackward", false);
         CharacterAnimator.SetBool("CrouchIdle", false);
+
+        lerp1 = 0f;
+        lerp2 = 0f;
+        direction = 1;
     }
 
     // Update is called once per frame
@@ -223,7 +262,10 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 lookP = hit.point;
             lookP.z = transform.position.z;
-            lookPos = lookP;
+            if(Vector3.Distance(lookP, transform.position) > 2)
+            {
+                lookPos = lookP;
+            }
         }
 
         //Arm ik rot
@@ -235,6 +277,7 @@ public class PlayerController : MonoBehaviour
         helper.transform.parent = transform;
 
         shoulderObj.position = helper.transform.position;
+        PlayerRotationHandler();
     }
 
     public void SetGrounded(bool state)
