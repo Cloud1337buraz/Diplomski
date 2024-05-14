@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638508043779613863
-    m_Hash: 1775792176
+      ticks: 638513202236863715
+    m_Hash: 2049070316
   m_LockFileStatus:
     m_FilePath: D:/Diplomski/Diplomski/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638508043786320979
-    m_Hash: 574239942
+      ticks: 638513202236863715
+    m_Hash: 2189975483
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -3690,13 +3690,15 @@ m_ResolvedPackages:
     - 1.8.12
     - 1.8.13
     - 1.8.14
+    - 1.8.15
     compatible:
     - 1.8.10
     - 1.8.11
     - 1.8.12
     - 1.8.13
     - 1.8.14
-    recommended: 1.8.14
+    - 1.8.15
+    recommended: 1.8.15
     deprecated: []
   dependencies:
   - name: com.unity.mathematics
