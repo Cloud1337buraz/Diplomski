@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
             Vector3 targetVelocity = new Vector3(fakeMove.x, 0, 0);
             targetVelocity *= currentSpeed;
 
-            Debug.Log(fakeMove + "  " + direction);
+            //Debug.Log(fakeMove + "  " + direction);
 
             targetVelocity = transform.TransformDirection(targetVelocity);
 
