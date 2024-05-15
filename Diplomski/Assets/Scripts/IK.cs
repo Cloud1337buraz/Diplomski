@@ -21,7 +21,7 @@ public class IK : MonoBehaviour
 
     void Update()
     {
-    
+           
     }
 
     private void OnAnimatorIK()

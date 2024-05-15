@@ -16,7 +16,7 @@ public class AnimationEvent : MonoBehaviour
     public void animationEventUnfreeze()
     {
         controllerScript.rb.constraints = RigidbodyConstraints.None;
-        controllerScript.rb.constraints = RigidbodyConstraints.FreezeRotation;
+        controllerScript.rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
     }
 
     public void animationCrouchedDown()

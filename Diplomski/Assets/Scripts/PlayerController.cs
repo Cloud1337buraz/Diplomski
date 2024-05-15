@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public BoxCollider boxCollider;
+    public CapsuleCollider playerCollider;
     public Rigidbody rb;
     public AnimationEvent animationEventScript;
 
@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     public bool isSPressed;
     public CeilingCheck ceilingCheckScript;
 
-    private Vector3 boxColliderSize;
+    private float colliderHeight;
     public Vector3 lookPos;
     private Vector3 targetPos;
 
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!(isPlaying("Crouch To Stand") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching")))
+        if (!(isPlaying("Crouch To Stand") || isPlaying("Stand To Crouch") ))
         {
             Move();
         }
@@ -173,10 +173,10 @@ public class PlayerController : MonoBehaviour
         {
             if(animationEventScript.isCrouched)
             {
-                hitboxHeight = boxColliderSize.y * heightPrecentage / 100;
-                hitboxY = startingY - ((boxColliderSize.y - hitboxHeight) / 2);
-                boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
-                boxCollider.center = new Vector3(0, hitboxY, 0);
+                hitboxHeight = colliderHeight * heightPrecentage / 100;
+                hitboxY = startingY - ((colliderHeight - hitboxHeight) / 2);
+                playerCollider.height = hitboxHeight;
+                playerCollider.center = new Vector3(0, hitboxY, 0);
             }
             CharacterAnimator.SetBool("CrouchIdle", true);
             currentSpeed = crouchSpeed;
@@ -185,10 +185,10 @@ public class PlayerController : MonoBehaviour
         {
             if (!animationEventScript.isCrouched)
             {
-                hitboxHeight = boxColliderSize.y;
+                hitboxHeight = colliderHeight;
                 hitboxY = startingY;
-                boxCollider.size = new Vector3(boxColliderSize.x, hitboxHeight, boxColliderSize.z);
-                boxCollider.center = new Vector3(0, hitboxY, 0);
+                playerCollider.height = hitboxHeight;
+                playerCollider.center = new Vector3(0, hitboxY, 0);
             }
             CharacterAnimator.SetBool("CrouchIdle", false);
             currentSpeed = speed;
@@ -234,13 +234,13 @@ public class PlayerController : MonoBehaviour
         helper = new GameObject();
 
         rb = GetComponent<Rigidbody>();
-        boxCollider = GetComponent<BoxCollider>();
-        boxColliderSize = boxCollider.size;
+        playerCollider = GetComponent<CapsuleCollider>();
+        colliderHeight = playerCollider.height;
 
         currentSpeed = speed;
         crouchSpeed = speed / 2;
 
-        startingY = boxCollider.center.y;
+        startingY = playerCollider.center.y;
 
         CharacterAnimator = PlayerModel.GetComponent<Animator>();
         CharacterAnimator.SetBool("Jump", false);
