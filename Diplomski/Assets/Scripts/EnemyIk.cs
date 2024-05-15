@@ -10,7 +10,7 @@ public class EnemyIk : MonoBehaviour
     public Transform rightArmTarget;
     public Transform leftArmHint;
     public Transform rightArmHint;
-    public Transform player;
+    private Transform player;
     public Transform gunHolder;
     public Transform shoulderBone;
     public Transform enemy;
@@ -22,6 +22,12 @@ public class EnemyIk : MonoBehaviour
     {
         helper = new GameObject();
         helper.name = "Gascina";
+
+        player = GameObject.Find("Player").transform;
+        if(player == null)
+        {
+            player = new GameObject().transform;
+        }
     }
 
     void Update()
