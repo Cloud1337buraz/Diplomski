@@ -5,16 +5,26 @@ using UnityEngine;
 
 public class EnemyIk : MonoBehaviour
 {
+    [Header("IK Components")]
     public Animator animator;
     public Transform leftArmTarget;
     public Transform rightArmTarget;
     public Transform leftArmHint;
     public Transform rightArmHint;
-    private Transform player;
     public Transform gunHolder;
     public Transform shoulderBone;
     public Transform enemy;
 
+    [Space(2)]
+    [Header("Enemy vision")]
+    public float sightRange = 20f;
+    private Transform playerTarget;
+    //[HideInInspector] 
+    public bool playerInSight;
+    private Vector3 lastPlayerPosition;
+
+
+    private Transform player;
     private Vector3 IK_lookPos;
     private float lerpRate = 15;
     private GameObject helper;
@@ -28,11 +38,27 @@ public class EnemyIk : MonoBehaviour
         {
             player = new GameObject().transform;
         }
+
+        playerTarget = GameObject.Find("PlayerHead").transform;
+        if(playerTarget == null)
+        {
+            playerTarget = new GameObject().transform;
+        }
+
+        lastPlayerPosition = playerTarget.position;
+    }
+
+    private void FixedUpdate()
+    {
+        CheckIfPlayerInSight();
     }
 
     void Update()
     {
-        gunHolder.LookAt(player.position);
+        if(playerInSight)
+        {
+            gunHolder.LookAt(player.position);
+        }
 
         Vector3 shoulderPos = shoulderBone.TransformPoint(Vector3.zero);
         helper.transform.position = shoulderPos;
@@ -49,7 +75,26 @@ public class EnemyIk : MonoBehaviour
         }
     }
 
-     private void OnAnimatorIK()
+    void CheckIfPlayerInSight()
+    {
+        Debug.DrawRay(shoulderBone.position, playerTarget.position - shoulderBone.position);
+        if(Physics.Raycast(shoulderBone.position, playerTarget.position - shoulderBone.position, out RaycastHit hit, sightRange))
+        {
+            if(hit.transform.gameObject.tag == player.tag)
+            {
+                playerInSight = true;
+                lastPlayerPosition = playerTarget.position;
+            } else
+            {
+                playerInSight = false;
+            }
+        } else
+        {
+            playerInSight = false;
+        }
+    }
+
+    private void OnAnimatorIK()
     {
         //Weight
         animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1); 
@@ -71,8 +116,9 @@ public class EnemyIk : MonoBehaviour
         animator.SetIKHintPosition(AvatarIKHint.RightElbow, rightArmHint.position); 
         animator.SetIKHintPosition(AvatarIKHint.LeftElbow, leftArmHint.position);
 
-        IK_lookPos = Vector3.Lerp(IK_lookPos, player.position, Time.deltaTime * lerpRate);
+        IK_lookPos = Vector3.Lerp(IK_lookPos, lastPlayerPosition, Time.deltaTime * lerpRate);
         animator.SetLookAtWeight(1, 0.6f, 1, 1, 0);
+
         animator.SetLookAtPosition(IK_lookPos);
     }
 }

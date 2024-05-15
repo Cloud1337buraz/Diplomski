@@ -1168,10 +1168,11 @@ MonoBehaviour:
   rightArmTarget: {fileID: 4629690626566524379}
   leftArmHint: {fileID: 7370515903135872030}
   rightArmHint: {fileID: 2822878329988070153}
-  player: {fileID: 0}
   gunHolder: {fileID: 5948547225408092563}
   shoulderBone: {fileID: 6878987695834641062}
   enemy: {fileID: 6223766409328165617}
+  sightRange: 20
+  playerInSight: 0
 --- !u!1 &3430466081942040103
 GameObject:
   m_ObjectHideFlags: 0
@@ -2840,7 +2841,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8576188121593469324}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 3.828, y: -2.993, z: 0.001999855}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2904,7 +2905,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8576188121593469324}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3ec30942b4806534bb9a023ec9dc9c3c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2916,7 +2917,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.43
   m_Height: 1.8003718
   m_Direction: 1
   m_Center: {x: -0.005710602, y: 0.8923964, z: 0.008579224}

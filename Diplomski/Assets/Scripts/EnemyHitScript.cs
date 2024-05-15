@@ -23,6 +23,7 @@ public class EnemyHitScript : MonoBehaviour
     private void FixedUpdate()
     {
         healthBar.LookAt(Vector3.up);
+        healthBar.rotation = Quaternion.Euler(healthBar.rotation.x, 0, healthBar.rotation.z);
     }
     public void Damage(float damageTaken)
     {
