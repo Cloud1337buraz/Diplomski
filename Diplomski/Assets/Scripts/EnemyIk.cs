@@ -31,7 +31,7 @@ public class EnemyIk : MonoBehaviour
     void Start()
     {
         helper = new GameObject();
-        helper.name = "Gascina";
+        helper.name = "Enemy Helper";
 
         player = GameObject.Find("Player").transform;
         if(player == null)
