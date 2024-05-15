@@ -22,6 +22,7 @@ public class EnemyIk : MonoBehaviour
     //[HideInInspector] 
     public bool playerInSight;
     private Vector3 lastPlayerPosition;
+    public Transform exclamationMark;
 
 
     private Transform player;
@@ -55,9 +56,15 @@ public class EnemyIk : MonoBehaviour
 
     void Update()
     {
+        exclamationMark.rotation = Quaternion.Euler(0,0,0);
+        exclamationMark.LookAt(Vector3.up);
         if(playerInSight)
         {
             gunHolder.LookAt(player.position);
+            exclamationMark.gameObject.SetActive(true);
+        } else
+        {
+            exclamationMark.gameObject.SetActive(false);
         }
 
         Vector3 shoulderPos = shoulderBone.TransformPoint(Vector3.zero);
@@ -80,6 +87,7 @@ public class EnemyIk : MonoBehaviour
         Debug.DrawRay(shoulderBone.position, playerTarget.position - shoulderBone.position);
         if(Physics.Raycast(shoulderBone.position, playerTarget.position - shoulderBone.position, out RaycastHit hit, sightRange))
         {
+            
             if(hit.transform.gameObject.tag == player.tag)
             {
                 playerInSight = true;

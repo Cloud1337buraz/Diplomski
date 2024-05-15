@@ -28,13 +28,10 @@ public class GunScript : MonoBehaviour
         audioS.Stop();
     }
 
-    public void Shoot()
+    public void MuzzleFlash()
     {
-        GameObject Light = Instantiate(muzzleFlash, muzzleFlashPosition);
-        Destroy(Light, 0.1f);
-
         GameObject Flash = Instantiate(muzzleFlash, muzzleFlashPosition);
-        Destroy(Flash, 0.1f);
+        Destroy(Flash, 0.15f);
     }
     // Update is called once per frame
     void Update()
@@ -50,15 +47,11 @@ public class GunScript : MonoBehaviour
         {
             if(time >= nextTimeToFire)
             {
-                Shoot();
+                MuzzleFlash();
                 //audioS.Play();
                 if (Physics.Raycast(transform.position, Vector3.Normalize(dir2), out hit, Mathf.Infinity, layerMask))
                 {
                     hit.transform.gameObject.GetComponent<EnemyHitScript>().Damage(25);
-                }
-                else
-                {
-                    Debug.Log("Did not Hit");
                 }
                 time = 0;
             }

@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!(isPlaying("Crouch To Stand") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching")))
+        if (!(isPlaying("Crouch To Stand") || isPlaying("Stand To Crouch") ))
         {
             Move();
         }
