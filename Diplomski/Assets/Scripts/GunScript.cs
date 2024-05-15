@@ -51,11 +51,10 @@ public class GunScript : MonoBehaviour
             if(time >= nextTimeToFire)
             {
                 Shoot();
-                audioS.Play();
+                //audioS.Play();
                 if (Physics.Raycast(transform.position, Vector3.Normalize(dir2), out hit, Mathf.Infinity, layerMask))
                 {
                     hit.transform.gameObject.GetComponent<EnemyHitScript>().Damage(25);
-                    Debug.Log(hit.transform.gameObject.GetComponent<EnemyHitScript>().health);
                 }
                 else
                 {

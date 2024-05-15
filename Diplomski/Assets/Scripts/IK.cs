@@ -17,11 +17,6 @@ public class IK : MonoBehaviour
 
     void Start()
     {
-        /*leftArmTarget.localPosition = new Vector3(5.00299978f, 1.66100001f, 10.5380001f);
-        leftArmTarget.rotation = Quaternion.Euler(new Vector3(57.7307472f, 171.033356f, 183.30809f));
-
-        rightArmTarget.localPosition = new Vector3(5.00299978f, 1.63300002f, 10.6129999f);
-        rightArmTarget.rotation = Quaternion.Euler(new Vector3(281.419922f, 178.315475f, 2.633955f));*/
     }
 
     void Update()
@@ -54,7 +49,7 @@ public class IK : MonoBehaviour
         this.lookPos = playerController.lookPos;
         lookPos.z = transform.position.z;
         float distancerlomPlayer = Vector3.Distance(lookPos, transform.position);
-        if (distancerlomPlayer > 2)
+        if (distancerlomPlayer > 1)
             targetPos = lookPos;
 
         IK_lookPos = Vector3.Lerp(IK_lookPos, targetPos, Time.deltaTime * lerpRate);

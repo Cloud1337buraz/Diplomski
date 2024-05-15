@@ -17,12 +17,17 @@ public class EnemyHitScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        healthBar.localScale = Vector3.Lerp(healthBar.localScale, new Vector3(startScale * health / 100, healthBar.localScale.y, healthBar.localScale.z), 7 * Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {
+        healthBar.LookAt(Vector3.up);
     }
     public void Damage(float damageTaken)
     {
         health -= damageTaken;
-        healthBar.localScale = new Vector3(startScale * health / 100, healthBar.localScale.y, healthBar.localScale.z); 
+         
         if (health <= 0)
         {
             Destroy(transform.gameObject);

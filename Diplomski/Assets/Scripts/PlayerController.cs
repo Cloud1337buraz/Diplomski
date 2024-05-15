@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -39,11 +40,13 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 boxColliderSize;
     public Vector3 lookPos;
+    private Vector3 targetPos;
 
     private GameObject helper;
     public Transform shoulderObj;
     public Transform shoulderTrans;
     public GameObject cameraPosition;
+    public LayerMask backgroundLayer;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -256,9 +259,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = Camera.main.nearClipPlane + 1;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, backgroundLayer))
         {
             Vector3 lookP = hit.point;
             lookP.z = transform.position.z;
@@ -268,9 +273,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //Arm ik rot
-        //lookPos = new Vector3(3.40100002f, 1.74199998f, 10.5880003f);
-        shoulderObj.LookAt(lookPos);
+        //Arm IK rotation
+        if (Math.Abs(transform.position.x - lookPos.x) > 0.8)
+            targetPos = lookPos;
+
+        shoulderObj.LookAt(targetPos);
 
         Vector3 shoulderPos = shoulderTrans.TransformPoint(Vector3.zero);
         helper.transform.position = shoulderPos;
