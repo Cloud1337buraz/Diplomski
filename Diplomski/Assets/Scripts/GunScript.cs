@@ -7,6 +7,7 @@ public class GunScript : MonoBehaviour
 {
     [Header("Assignables")]
     public LayerMask layerMask;
+    public LayerMask doorMask;
     public GameObject muzzleFlash;
     public Transform muzzleFlashPosition;
 
@@ -54,6 +55,13 @@ public class GunScript : MonoBehaviour
                     hit.transform.gameObject.GetComponent<EnemyHitScript>().Damage(25);
                 }
                 time = 0;
+            }
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            if (Physics.Raycast(transform.position, Vector3.Normalize(dir2), out hit, Mathf.Infinity, doorMask))
+            {
+                hit.transform.gameObject.GetComponent<doorscript>().OpenDoor();
             }
         }
         Debug.DrawRay(transform.position, Vector3.Normalize(dir2) * 1000, Color.red);

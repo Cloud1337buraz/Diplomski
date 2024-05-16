@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour
     public GameObject cameraPosition;
     public LayerMask backgroundLayer;
 
+    public GameObject door;
+
     public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
@@ -227,6 +229,7 @@ public class PlayerController : MonoBehaviour
             cameraPosition.transform.parent = transform;
         }
     }
+    
 
     // Start is called before the first frame update
     void Start()

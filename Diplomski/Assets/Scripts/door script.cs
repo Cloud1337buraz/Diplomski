@@ -6,8 +6,12 @@ public class doorscript : MonoBehaviour
 {
     // Start is called before the first frame update
     Vector3 angle;
-    bool closed = true;
-    int x = -90;
+    bool open = false;
+    bool opening = false;
+    bool didOpen = false;
+    float x = 3f;
+    float opened = 0f;
+    public Transform pivotPoint;
 
     void Start()
     {
@@ -17,20 +21,24 @@ public class doorscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (closed)
-        {
-            closed = false;   
-            angle = new Vector3(x, 0, 0);
+        if (opening)
+        {  
+            angle = new Vector3(0, opened - x, 0);
 
-            transform.localEulerAngles = angle;
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z * 2);
+            pivotPoint.localEulerAngles = angle;
+            opened -= x;
+            if (opened <= -90)
+            {
+                opening = false;
+                didOpen = true;
+            }
         }
     }
     public void OpenDoor()
     {
-        if (closed)
+        if (!open && !didOpen)
         {
-            closed = false;
+            opening = true;
         }
     }
 }
