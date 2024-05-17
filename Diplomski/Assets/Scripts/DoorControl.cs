@@ -6,7 +6,8 @@ public class DoorControl : MonoBehaviour
 {
     Vector3 angle;
     bool open = false;
-    bool opening = false;
+    bool openingRight = false;
+    bool openingLeft = false;
     bool didOpen = false;
     float x = 3f;
     float opened = 0f;
@@ -35,15 +36,27 @@ public class DoorControl : MonoBehaviour
             }
         }
 
-        if (opening)
-        {  
+        if (openingRight)
+        {
+            angle = new Vector3(0, opened + x, 0);
+
+            transform.localEulerAngles = angle;
+            opened += x;
+            if (opened >= 90)
+            {
+                openingRight = false;
+                didOpen = true;
+            }
+        }
+        else if(openingLeft)
+        {
             angle = new Vector3(0, opened - x, 0);
 
             transform.localEulerAngles = angle;
             opened -= x;
             if (opened <= -90)
             {
-                opening = false;
+                openingLeft = false;
                 didOpen = true;
             }
         }
@@ -52,7 +65,10 @@ public class DoorControl : MonoBehaviour
     {
         if (!open && !didOpen)
         {
-            opening = true;
+        if (player.position.x < transform.position.x)
+            openingRight = true;
+        else
+            openingLeft = true;
         }
     }
 }
