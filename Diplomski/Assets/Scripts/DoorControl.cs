@@ -1,20 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class DoorControl : MonoBehaviour
 {
-    Vector3 angle;
-    bool open = false;
-    bool openingRight = false;
-    bool openingLeft = false;
-    bool didOpen = false;
-    float x = 3f;
-    float opened = 0f;
+    bool opening = false;
+    static float degreesPerUpdate = 200f;
     private Transform player;
     public LayerMask doorMask;
     public float doorOpenDistance = 2f;
     private int doorId;
+    int differenceInPosition;
+    float currentAngle;
 
     void Start()
     {
@@ -36,39 +34,26 @@ public class DoorControl : MonoBehaviour
             }
         }
 
-        if (openingRight)
+        if (opening)
         {
-            angle = new Vector3(0, opened + x, 0);
-
-            transform.localEulerAngles = angle;
-            opened += x;
-            if (opened >= 90)
+            if (Mathf.Abs(currentAngle) <= 90)
             {
-                openingRight = false;
-                didOpen = true;
+                currentAngle += degreesPerUpdate * differenceInPosition * Time.deltaTime;
+                transform.rotation = Quaternion.Euler(0, currentAngle, 0);
             }
-        }
-        else if(openingLeft)
-        {
-            angle = new Vector3(0, opened - x, 0);
-
-            transform.localEulerAngles = angle;
-            opened -= x;
-            if (opened <= -90)
-            {
-                openingLeft = false;
-                didOpen = true;
-            }
+            else opening = false;
         }
     }
     public void OpenDoor()
     {
-        if (!open && !didOpen)
-        {
-        if (player.position.x < transform.position.x)
-            openingRight = true;
-        else
-            openingLeft = true;
-        }
+            if (player.position.x < transform.position.x)
+            {
+                differenceInPosition = 1;
+            }
+            else
+            {
+                differenceInPosition = -1;
+            }
+        opening = true;
     }
 }

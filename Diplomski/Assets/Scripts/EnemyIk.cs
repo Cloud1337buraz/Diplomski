@@ -46,7 +46,8 @@ public class EnemyIk : MonoBehaviour
             playerTarget = new GameObject().transform;
         }
 
-        lastPlayerPosition = playerTarget.position;
+        lastPlayerPosition = transform.position + transform.forward * 2;
+
     }
 
     private void FixedUpdate()
@@ -73,10 +74,10 @@ public class EnemyIk : MonoBehaviour
 
         gunHolder.position = helper.transform.position;
 
-        if(player.position.x > transform.position.x)
+        if(player.position.x > transform.position.x && playerInSight)
         {
             enemy.rotation = Quaternion.Slerp(enemy.rotation, Quaternion.Euler(0, 90, 0), 10 * Time.deltaTime);
-        } else
+        } else if(playerInSight)
         {
             enemy.rotation = Quaternion.Slerp(enemy.rotation, Quaternion.Euler(0, 90+180, 0), 10 * Time.deltaTime);
         }
