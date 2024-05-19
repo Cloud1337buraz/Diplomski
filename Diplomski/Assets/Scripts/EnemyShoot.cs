@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,13 +10,27 @@ public class EnemyShoot : MonoBehaviour
     private PlayerStats playerStatsScript;
     public Transform muzzlePosition;
     public GameObject muzzleFlashPrefab;
-    public float gunDamage;
 
-    public float fireRateMiliseconds;
+    public AudioClip gunShot;
+    private AudioSource audioS;
+
+    private static float fireRateMiliseconds = 800f;
     private float timeAfterLastShoot;
+
+    private TMP_Text enemyMiss;
+
+    public float gunDamage;
 
     void Start()
     {
+        enemyMiss = GameObject.Find("EnemyMissed").GetComponent<TMP_Text>();
+        enemyMiss.text = "";
+
+        audioS = gameObject.AddComponent<AudioSource>();
+        audioS.playOnAwake = false;
+        audioS.clip = gunShot;
+        audioS.Stop();
+
         timeAfterLastShoot = fireRateMiliseconds;
 
         GameObject player = GameObject.Find("Player");
@@ -34,11 +49,25 @@ public class EnemyShoot : MonoBehaviour
         }
     }
 
+    void RemoveText()
+    {
+        enemyMiss.text = "";
+    }
     void FireAtPlayer()
     {
         timeAfterLastShoot = 0;
-        playerStatsScript.DamagePlayer(gunDamage);
+        float random = Random.value;
+        if(random > 0.2f)
+        {
+            playerStatsScript.DamagePlayer(gunDamage);
+        }
+        else
+        {
+            enemyMiss.text = "Enemy missed";
+            Invoke("RemoveText", 0.4f);
+        }
         MuzzleFlash();
+        audioS.Play();
     }
 
     void MuzzleFlash()

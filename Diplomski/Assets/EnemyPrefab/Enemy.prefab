@@ -3238,8 +3238,8 @@ MonoBehaviour:
   IkScript: {fileID: 5730874308286183732}
   muzzlePosition: {fileID: 1695381931080931050}
   muzzleFlashPrefab: {fileID: 6994403996389716108, guid: f0af6493ba35b2143add5f1770dc3642, type: 3}
+  gunShot: {fileID: 8300000, guid: cc30fb0e1f742774f97984d6d149a016, type: 3}
   gunDamage: 7
-  fireRateMiliseconds: 200
 --- !u!1 &8652039521905467318
 GameObject:
   m_ObjectHideFlags: 0
