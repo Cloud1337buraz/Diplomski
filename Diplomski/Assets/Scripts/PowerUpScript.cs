@@ -17,9 +17,20 @@ public class PowerUpScript : MonoBehaviour
             powerUpManager.jumpPowerUp = true;
             GameObject.Destroy(gameObject);
 
-            if (powerUpManager.jumpTime > 0 && powerUpManager.jumpPowerUp)
+            if (powerUpManager.jumpTime > 0)
             {
                 powerUpManager.jumpTime = 0;    
+            }
+        }
+
+        if (gameObject.tag == "FireRatePowerUp")
+        {
+            powerUpManager.fireRatePowerUp = true;
+            GameObject.Destroy(gameObject);
+
+            if (powerUpManager.fireRateTime > 0)
+            {
+                powerUpManager.fireRateTime = 0;
             }
         }
     }

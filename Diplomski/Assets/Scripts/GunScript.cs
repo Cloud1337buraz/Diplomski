@@ -14,7 +14,7 @@ public class GunScript : MonoBehaviour
     private AudioSource audioS;
 
     [Header("Stats")]
-    public float fireRate = 0.5f;
+    public float fireRate;
 
     public float time;
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class GunScript : MonoBehaviour
     public void MuzzleFlash()
     {
         GameObject Flash = Instantiate(muzzleFlash, muzzleFlashPosition);
-        Destroy(Flash, 0.15f);
+        Destroy(Flash, fireRate * 0.0005f);
     }
     // Update is called once per frame
     void Update()
@@ -48,7 +48,7 @@ public class GunScript : MonoBehaviour
             if(time >= nextTimeToFire)
             {
                 MuzzleFlash();
-                //audioS.Play();
+                audioS.Play();
                 if (Physics.Raycast(transform.position, Vector3.Normalize(dir2), out hit, Mathf.Infinity))
                 {
                     if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
