@@ -13,6 +13,8 @@ public class GunScript : MonoBehaviour
     public AudioClip gunShot;
     private AudioSource audioS;
 
+    private PlayerStats playerStatsScript;
+
     [Header("Stats")]
     public float fireRate;
 
@@ -20,6 +22,13 @@ public class GunScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject player = GameObject.Find("Player");
+        playerStatsScript = player.GetComponent<PlayerStats>();
+        if (playerStatsScript == null)
+        {
+            playerStatsScript = new PlayerStats();
+        }
+
         time = 0;
 
         audioS = gameObject.AddComponent<AudioSource>();
@@ -43,7 +52,7 @@ public class GunScript : MonoBehaviour
         Vector3 dir = transform.TransformDirection(Vector3.forward);
         Vector3 dir2 = new Vector3(dir.x, dir.y, 0);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !playerStatsScript.isDead)
         {
             if(time >= nextTimeToFire)
             {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using TMPro;
 using UnityEngine;
 
 public class DoorControl : MonoBehaviour
@@ -13,10 +14,19 @@ public class DoorControl : MonoBehaviour
     private int doorId;
     int differenceInPosition;
     float currentAngle;
+    private PlayerStats playerStatsScript;
+    public bool needsAKey;
+    private TMP_Text doorLocked;
 
+    void RemoveText()
+    {
+        doorLocked.text = "";
+    }
     void Start()
     {
+        doorLocked = GameObject.Find("DoorLocked").GetComponent<TMP_Text>();
         player = GameObject.Find("Player").transform;
+        playerStatsScript = player.gameObject.GetComponent<PlayerStats>();
         doorId = transform.GetChild(0).gameObject.GetInstanceID();
     }
 
@@ -29,7 +39,19 @@ public class DoorControl : MonoBehaviour
             {
                 if(hit.transform.gameObject.GetInstanceID() == doorId)
                 {
-                    OpenDoor();
+                    if(!needsAKey)
+                    {
+                        OpenDoor();
+                    }
+                    else if(needsAKey && playerStatsScript.hasKey)
+                    {
+                        OpenDoor();
+                    }
+                    else
+                    {
+                        doorLocked.text = "Door is locked";
+                        Invoke("RemoveText", 1f);
+                    }
                 }
             }
         }

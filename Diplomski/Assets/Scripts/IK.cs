@@ -15,8 +15,16 @@ public class IK : MonoBehaviour
     Vector3 targetPos;
     float lerpRate = 15;
 
+    private float weight;
+    private float bodyWeight;
+    private PlayerStats playerStatsScript;
+
+
     void Start()
     {
+        weight = 1f;
+        bodyWeight = 0.6f;
+        playerStatsScript = GameObject.Find("Player").GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -26,13 +34,24 @@ public class IK : MonoBehaviour
 
     private void OnAnimatorIK()
     {
+        if(playerStatsScript.isDead)
+        {
+            weight = 0f;
+            bodyWeight = 0f;
+        }
+        else
+        {
+            weight = 1f;
+            bodyWeight = 0.6f;
+        }
+
         //Weight
-        animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1); 
-        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-        animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 1);
-        animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, 1);
-        animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
-        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+        animator.SetIKPositionWeight(AvatarIKGoal.RightHand, weight); 
+        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, weight);
+        animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, weight);
+        animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, weight);
+        animator.SetIKRotationWeight(AvatarIKGoal.RightHand, weight);
+        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, weight);
 
         //Pos
         animator.SetIKPosition(AvatarIKGoal.RightHand, rightArmTarget.position);
@@ -53,7 +72,7 @@ public class IK : MonoBehaviour
             targetPos = lookPos;
 
         IK_lookPos = Vector3.Lerp(IK_lookPos, targetPos, Time.deltaTime * lerpRate);
-        animator.SetLookAtWeight(1, 0.6f, 1, 1, 0);
+        animator.SetLookAtWeight(weight, bodyWeight, weight, weight, 0);
         animator.SetLookAtPosition(IK_lookPos);
     }
 }

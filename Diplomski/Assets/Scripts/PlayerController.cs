@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     public Transform shoulderTrans;
     public GameObject cameraPosition;
     public LayerMask backgroundLayer;
+    public PlayerStats playerStatsScript;
 
     public GameObject door;
 
@@ -56,7 +57,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(!(isSPressed || isPlaying("Crouch To Stand") || isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching")))
+        if(!(isSPressed || isPlaying("Crouch To Stand") || isPlaying("Jump - Land") || isPlaying("Stand To Crouch") || isPlaying("Idle Crouching") || playerStatsScript.isDead))
         {
             Jump();
         }  
@@ -68,11 +69,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!(isPlaying("Crouch To Stand") || isPlaying("Stand To Crouch") ))
+        if (!(isPlaying("Crouch To Stand") || isPlaying("Stand To Crouch") || playerStatsScript.isDead))
         {
             Move();
         }
-        Crouch();
+        if(!playerStatsScript.isDead)
+        {
+            Crouch();
+        }
     }
 
     void Jump()
@@ -287,7 +291,10 @@ public class PlayerController : MonoBehaviour
         helper.transform.parent = transform;
 
         shoulderObj.position = helper.transform.position;
-        PlayerRotationHandler();
+        if(!playerStatsScript.isDead)
+        {
+            PlayerRotationHandler();
+        }
     }
 
     public void SetGrounded(bool state)

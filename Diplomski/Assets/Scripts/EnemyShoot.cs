@@ -57,9 +57,9 @@ public class EnemyShoot : MonoBehaviour
     {
         timeAfterLastShoot = 0;
         float random = Random.value;
-        if(random > 0.2f)
+        if(random > 0.2f && playerStatsScript.health > 0)
         {
-            playerStatsScript.DamagePlayer(gunDamage);
+            playerStatsScript.DamagePlayer(100);
         }
         else
         {
