@@ -68,7 +68,7 @@ public class IK : MonoBehaviour
         this.lookPos = playerController.lookPos;
         lookPos.z = transform.position.z;
         float distancerlomPlayer = Vector3.Distance(lookPos, transform.position);
-        if (distancerlomPlayer > 1)
+        if (distancerlomPlayer > 0.5f)
             targetPos = lookPos;
 
         IK_lookPos = Vector3.Lerp(IK_lookPos, targetPos, Time.deltaTime * lerpRate);

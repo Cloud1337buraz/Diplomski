@@ -41,7 +41,7 @@ public class PlayerStats : MonoBehaviour
         if(health <= 0)
         {
             animator.applyRootMotion = true;
-            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
             animator.SetTrigger("Dead");
             died.SetActive(true);
             isDead = true;
