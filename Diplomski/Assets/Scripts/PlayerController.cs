@@ -281,7 +281,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Arm IK rotation
-        if (Math.Abs(transform.position.x - lookPos.x) > 0.8)
+        if (Math.Abs(transform.position.x - lookPos.x) > 0.5)
             targetPos = lookPos;
 
         shoulderObj.LookAt(targetPos);

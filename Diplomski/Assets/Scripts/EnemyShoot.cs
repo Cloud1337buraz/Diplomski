@@ -43,7 +43,7 @@ public class EnemyShoot : MonoBehaviour
     void Update()
     {
         timeAfterLastShoot += Time.deltaTime;
-        if(IkScript.playerInSight && timeAfterLastShoot >= fireRateMiliseconds/1000f)
+        if(IkScript.playerInSight && timeAfterLastShoot >= fireRateMiliseconds/1000f && playerStatsScript.health > 0)
         {
             FireAtPlayer();
         }
@@ -57,7 +57,7 @@ public class EnemyShoot : MonoBehaviour
     {
         timeAfterLastShoot = 0;
         float random = Random.value;
-        if(random > 0.2f && playerStatsScript.health > 0)
+        if(random > 0.2f)
         {
             playerStatsScript.DamagePlayer(gunDamage);
         }
