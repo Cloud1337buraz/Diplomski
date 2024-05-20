@@ -59,7 +59,7 @@ public class EnemyShoot : MonoBehaviour
         float random = Random.value;
         if(random > 0.2f && playerStatsScript.health > 0)
         {
-            playerStatsScript.DamagePlayer(100);
+            playerStatsScript.DamagePlayer(gunDamage);
         }
         else
         {
